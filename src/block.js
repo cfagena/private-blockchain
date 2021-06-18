@@ -45,16 +45,14 @@ class Block {
             // Recalculate the hash of the Block
             // Comparing if the hashes changed
             // Returning the Block is not valid
-            const calculatedHash = SHA256(JSON.stringify(self))
+            const calculatedHash = SHA256(JSON.stringify(self)).toString()
             self.hash = currentHash
 
             if (currentHash == calculatedHash) {
-                resolve(self);
+                resolve(true);
             } else {
-                reject(Error(`Block: ${self.height} has been tempered`));
+                resolve(false);
             }
-    
-            // Returning the Block is valid
         });
     }
 
@@ -79,7 +77,7 @@ class Block {
             let decode = null;
 
             if (self.body !== null) {
-                decode = hex2ascii.hex2ascii(self.body);
+                decode = JSON.parse(hex2ascii(self.body));
             }
         
             if (decode !== null) {
